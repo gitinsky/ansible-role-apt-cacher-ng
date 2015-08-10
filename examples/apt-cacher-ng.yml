@@ -1,0 +1,29 @@
+- hosts:
+  - apt-cacher-ng-servers
+  - all
+  sudo: yes
+  roles:
+    - vagrant
+    - apt-cacher-ng
+    - apt-cached, apt_cacher_ng_address=192.168.33.254
+    - nginx
+    
+  tasks:
+    
+    - name: put nginx config
+      template:
+        src: templates/nginx/apt-cache-ng.conf
+        dest: /etc/nginx/sites-available/apt-cache-ng.conf
+      notify: reload nginx
+      tags:
+        - nginx
+        - config
+        
+    - name: enable nginx config
+      file: state=link src=../sites-available/apt-cache-ng.conf dest=/etc/nginx/sites-enabled/apt-cache-ng.conf
+      notify: reload nginx
+      tags:
+        - nginx
+        - config
+    
+# https://blog.sleeplessbeastie.eu/2013/09/15/how-to-setup-apt-caching-proxy/

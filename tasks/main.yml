@@ -1,0 +1,9 @@
+---
+- name: update cache if required
+  apt: 
+    update_cache: yes
+    cache_valid_time: 600
+  ignore_errors: true
+
+- name: Install apt-cacher-ng
+  apt: name=apt-cacher-ng
